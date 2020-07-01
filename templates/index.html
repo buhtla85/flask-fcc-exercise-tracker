@@ -21,7 +21,7 @@
                     <p class="teal lighten-5">
                         <code>POST /api/exercise/new-user</code>
                     </p>
-                    <form action="" method="POST" action="{{ url_for('.index') }}">
+                    <form method="POST" action="{{ url_for('.index') }}">
                         <div class="row">
                             <div class="input-field col s6">
                                 <input placeholder="Placeholder" id="first_name" name="name" type="text" class="validate">
@@ -39,7 +39,7 @@
                     <p class="teal lighten-5">
                         <code>POST /api/exercise/add</code>
                     </p>
-                    <form action="">
+                    <form method="POST" action="{{ url_for('.index') }}">
                         <div class="row">
                             <div class="input-field col s6">
                                 <input placeholder="Placeholder" id="userId" type="text" class="validate">
