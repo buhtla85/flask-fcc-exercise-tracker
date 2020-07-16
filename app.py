@@ -5,13 +5,13 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sqlite.db'
 db = SQLAlchemy(app)
 # init marshmallow - for serialization 
 ma = Marshmallow(app)
 
+#db schemas
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
@@ -25,9 +25,17 @@ class Exercise(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 # marshmallow schemas
+# schema for returning {name: "", id: ""} /api/exercise/new-user
 class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name')
+
+#schema for returning {id: "", username: "", date: "", duration: x, description: ""} /api/exercise/add
+class AddExerciseToUser(ma.Schema):
+    class Meta:
+        fields = ('id', 'name', 'date', 'duration', 'description')
+
+#schema for returning {id: "", name:"", count: x, log: [{description: "", duration: x, date: ""}, {...}]}
 
 # init schema
 user_schema = UserSchema()
@@ -36,9 +44,6 @@ users_schema = UserSchema(many=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
-    # if request.method == 'GET':
-    #     pass
     if request.method == 'POST':
         return redirect(url_for('new_user'), code=307)
 
@@ -65,12 +70,14 @@ def new_user():
 def get_all_users():
     data = User.query.all()
     result = users_schema.dump(data)
-    # obs - data prop on result object/dict!
     return jsonify(result)
     
 
 
 # upon adding exercise we are being redirected to /api/exercise/add and the added exercise details are displayed in json format 
+
+
+
 
 
 if __name__ == '__main__':
