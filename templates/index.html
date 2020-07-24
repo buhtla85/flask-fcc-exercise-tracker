@@ -28,7 +28,7 @@
                                 <label for="first_name">Name</label>
                               </div>
                         </div>
-                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                        <button class="btn waves-effect waves-light" type="submit" name="action" value="user">Submit
                             <i class="material-icons right">send</i>
                         </button>
                     </form>
@@ -42,23 +42,23 @@
                     <form method="POST" action="{{ url_for('.index') }}">
                         <div class="row">
                             <div class="input-field col s6">
-                                <input placeholder="Placeholder" id="userId" type="text" class="validate">
+                                <input placeholder="User ID" id="userId" name="userId" type="text" class="validate">
                                 <label for="userId">userId</label>
                             </div>
                             <div class="input-field col s6">
-                                <input placeholder="Placeholder" id="description" type="text" class="validate">
+                                <input placeholder="Description" id="description" name="description" type="text" class="validate">
                                 <label for="description">description</label>
                             </div>
                             <div class="input-field col s6">
-                                <input placeholder="Placeholder" id="duration" type="text" class="validate">
+                                <input placeholder="Duration" id="duration" name="duration" type="text" class="validate">
                                 <label for="duration">duration(mins.)</label>
                             </div>
                             <div class="input-field col s6">
-                                <input placeholder="Placeholder" id="date" type="text" class="validate">
-                                <label for="date">date(yyyy-mm-dd)</label>
+                                <input placeholder="Date(yyyy/mm/dd)" id="date" name="date" type="date" class="validate">
+                                <label for="date"></label>
                             </div>
                         </div>
-                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                        <button class="btn waves-effect waves-light" type="submit" name="action" value="exercise">Submit
                             <i class="material-icons right">send</i>
                         </button>
                     </form>
