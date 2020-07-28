@@ -30,10 +30,10 @@ class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name')
 
-#schema for returning {id: "", username: "", date: "", duration: x, description: ""} /api/exercise/add
+#schema for returning {id: "", date: "", duration: x, description: ""} /api/exercise/add
 class AddExerciseToUserSchema(ma.Schema):
     class Meta:
-        fields = ('user_id', 'name', 'date', 'duration', 'description')
+        fields = ('user_id', 'date', 'duration', 'description')
 
 #nested "log" schema 
 class LogSchema(ma.Schema):
@@ -50,6 +50,7 @@ class UserAndExercisesSchema(ma.Schema):
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 add_single_exercise = AddExerciseToUserSchema()
+get_log = UserAndExercisesSchema()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -88,6 +89,7 @@ def get_all_users():
 
 
 # add exercise and return them to the user in json format
+# it is working now, but it needs validators
 @app.route('/api/exercise/add', methods=['POST'])
 def add_exercise():
     user_id = request.form['userId']
@@ -115,6 +117,21 @@ def add_exercise():
         
             # return 'There was an issue adding user.'
 
+# retrieve a full exercise log of any user by getting /api/exercise/log with a parameter of userId(_id). 
+# app will return the user object with added array log and count (total exercise count). id, name, count, log
+# get_log
+@app.route('/api/exercise/log/<int:id>', methods=['GET'])
+def exercise_log(id):
+    records = db.session.query(User).filter(User.id == id).join(Exercise)
+    for record in records:
+        recordObject = {'id': record.id, 'name': record.name, 'log': []}
+        for exercise in record.exercises:
+            exercise = {'duration': exercise.duration, 'date': exercise.date, 'description': exercise.description}
+            recordObject['log'].append(exercise)
+            recordObject['count'] = len(recordObject['log'])
+            return jsonify(recordObject)
+    
+    
 
 
 
